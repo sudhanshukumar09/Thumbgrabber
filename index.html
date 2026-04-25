@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Thumb Grabber - YouTube Thumbnail Downloader | Free & Fast</title>
+  <meta name="description" content="Download YouTube thumbnails in HD quality for free. Fast, one-click downloader. Support all video qualities - 720p, 1080p, 4K. No registration required.">
+  <meta name="keywords" content="youtube thumbnail downloader, thumbnail download, youtube thumbnail, video thumbnail downloader, thumb grabber">
+  <meta name="author" content="ThumbGrabber">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://thumbgrabber.com">
+  <meta property="og:title" content="Thumb Grabber - YouTube Thumbnail Downloader">
+  <meta property="og:description" content="Download any YouTube video thumbnail in high quality. Free, fast, and easy to use.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      font-family: 'Segoe UI', system-ui, -apple-system, 'Poppins', sans-serif;
+      min-height: 100vh;
+      color: #f1f5f9;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .logo {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #f97316, #ef4444);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+    .tagline {
+      color: #94a3b8;
+      font-size: 1rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    /* Main Card */
+    .card {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 2rem;
+      padding: 2rem;
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      margin-bottom: 2rem;
+    }
+
+    /* Input Section */
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #f97316;
+    }
+
+    .url-input {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      font-size: 1rem;
+      border: 2px solid #334155;
+      border-radius: 1.5rem;
+      background: #0f172a;
+      color: white;
+      transition: all 0.3s ease;
+      font-family: monospace;
+    }
+
+    .url-input:focus {
+      outline: none;
+      border-color: #f97316;
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+    }
+
+    .url-input::placeholder {
+      color: #475569;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 2rem;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: white;
+      width: 100%;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Result Section */
+    .result-section {
+      margin-top: 2rem;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .thumbnail-preview {
+      text-align: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .thumbnail-preview img {
+      max-width: 100%;
+      border-radius: 1rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      border: 2px solid #f97316;
+    }
+
+    /* Quality selection hint */
+    .quality-hint {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin: 0.8rem 0 1rem 0;
+      letter-spacing: 0.3px;
+      background: rgba(15, 23, 42, 0.5);
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      display: inline-block;
+      width: auto;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .quality-hint span {
+      color: #f97316;
+      font-weight: 600;
+    }
+
+    /* Quality buttons - slightly smaller size */
+    .quality-buttons {
+      display: flex;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 1rem 0 1.5rem 0;
+    }
+
+    .quality-btn {
+      background: #1e293b;
+      color: #f1f5f9;
+      padding: 0.6rem 1.2rem;
+      border-radius: 1.8rem;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.2s;
+      border: 1px solid #334155;
+      cursor: pointer;
+      font-family: inherit;
+      min-width: 70px;
+      text-align: center;
+    }
+
+    .quality-btn:hover {
+      background: #f97316;
+      border-color: #f97316;
+      transform: scale(1.03);
+    }
+
+    /* Active (selected) state for quality button */
+    .quality-btn.active {
+      background: #f97316;
+      border-color: #f97316;
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.5);
+      color: white;
+    }
+
+    /* Download Button Container - matching site color theme */
+    .download-action {
+      text-align: center;
+      margin: 1.5rem 0 1rem 0;
+      animation: fadeInUp 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .download-btn {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: white;
+      padding: 0.9rem 2rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 3rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(249, 115, 22, 0.3);
+      width: 100%;
+      max-width: 280px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+    }
+
+    .download-btn:active {
+      transform: translateY(0);
+    }
+
+    .download-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      pointer-events: none;
+    }
+
+    .video-info {
+      background: #0f172a;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .video-info strong {
+      color: #f97316;
+    }
+
+    /* Error Message */
+    .error-message {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #ef4444;
+      border-radius: 1rem;
+      padding: 1rem;
+      margin-top: 1rem;
+      text-align: center;
+      color: #fecaca;
+      display: none;
+    }
+
+    /* Features Section */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .feature {
+      background: rgba(15, 23, 42, 0.6);
+      padding: 1.2rem;
+      border-radius: 1.2rem;
+      text-align: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature h3 {
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+      color: #f97316;
+    }
+
+    .feature p {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #334155;
+      color: #64748b;
+      font-size: 0.8rem;
+    }
+
+    .footer a {
+      color: #f97316;
+      text-decoration: none;
+    }
+
+    /* Loading Spinner */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #f97316;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .btn-text {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .container {
+        padding: 1rem;
+      }
+      .card {
+        padding: 1.5rem;
+      }
+      h1 {
+        font-size: 1.4rem;
+      }
+      .logo {
+        font-size: 1.8rem;
+      }
+      .quality-buttons {
+        gap: 0.6rem;
+      }
+      .quality-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        min-width: 60px;
+      }
+      .download-btn {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+      }
+      .quality-hint {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">🎬 Thumb Grabber</div>
+    <h1>YouTube Thumbnail Downloader</h1>
+    <p class="tagline">Fast • Free • One Click • HD Quality</p>
+  </div>
+
+  <!-- Main Card -->
+  <div class="card">
+    <div class="input-group">
+      <label>📌 YouTube Video URL</label>
+      <input type="text" id="videoUrl" class="url-input" placeholder="Paste YouTube link here... (e.g., https://youtu.be/... or https://www.youtube.com/watch?v=...)" value="">
+    </div>
+    
+    <button id="fetchBtn" class="btn btn-primary">
+      <span class="btn-text">✨ Get Thumbnail</span>
+    </button>
+
+    <!-- Error Message -->
+    <div id="errorMsg" class="error-message">
+      ⚠️ Invalid YouTube URL! Please paste a valid YouTube video link.
+    </div>
+
+    <!-- Result Section -->
+    <div id="resultSection" class="result-section">
+      <div class="thumbnail-preview">
+        <img id="thumbnailImg" alt="Thumbnail Preview">
+      </div>
+      
+      <!-- Hint text to indicate quality selection -->
+      <div style="text-align: center;">
+        <div class="quality-hint">
+          🎯 <span>Choose the quality</span> — click on any resolution
+        </div>
+      </div>
+      
+      <!-- Quality buttons - only numbers (4K, 720p, 480p, 320p, 144p) -->
+      <div class="quality-buttons" id="qualityButtons">
+        <!-- Quality buttons will be added dynamically -->
+      </div>
+      
+      <!-- Download Button (appears only after quality selection) - matching site color -->
+      <div id="downloadActionContainer" class="download-action" style="display: none;">
+        <button id="confirmDownloadBtn" class="download-btn">
+          Download Thumbnail
+        </button>
+      </div>
+      
+      <div id="videoInfo" class="video-info">
+        <!-- Video info will appear here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section - SEO Friendly -->
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">⚡</div>
+      <h3>One Click Download</h3>
+      <p>Paste URL & get thumbnails instantly</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🎯</div>
+      <h3>All Qualities</h3>
+      <p>Maxres, HD, SD, Default & more</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🆓</div>
+      <h3>100% Free</h3>
+      <p>No registration, no hidden charges</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📱</div>
+      <h3>Mobile Friendly</h3>
+      <p>Works on all devices perfectly</p>
+    </div>
+  </div>
+
+  <!-- How to Use / FAQ Section -->
+  <div class="card" style="margin-top: 1rem;">
+    <h3 style="color: #f97316; margin-bottom: 1rem;">📖 How to Use?</h3>
+    <ol style="margin-left: 1.5rem; line-height: 1.8; color: #cbd5e1;">
+      <li>Copy any YouTube video URL from browser or YouTube app</li>
+      <li>Paste the link in the input box above</li>
+      <li>Click "Get Thumbnail" button</li>
+      <li>Below thumbnail, you'll see quality numbers (4K, 720p, 480p, 320p, 144p)</li>
+      <li><strong>Click on any quality number</strong> — the button will become dark (highlighted)</li>
+      <li>After selection, a "Download Thumbnail" button appears — click it to save instantly</li>
+    </ol>
+    <p style="margin-top: 1rem; color: #94a3b8; font-size: 0.85rem;">💡 <strong>Tip:</strong> Works with all YouTube formats: youtu.be/*, youtube.com/watch?v=*, youtube.com/shorts/*</p>
+  </div>
+
+  <div class="footer">
+    <p>© 2025 Thumb Grabber - Free YouTube Thumbnail Downloader | No copyright infringement intended. Thumbnails are property of respective video owners.</p>
+    <p style="margin-top: 0.5rem;">⚡ Fast • Simple • One Page Tool | <a href="#">Privacy Policy</a></p>
+  </div>
+</div>
+
+<script>
+  // DOM Elements
+  const videoUrlInput = document.getElementById('videoUrl');
+  const fetchBtn = document.getElementById('fetchBtn');
+  const resultSection = document.getElementById('resultSection');
+  const thumbnailImg = document.getElementById('thumbnailImg');
+  const qualityButtonsContainer = document.getElementById('qualityButtons');
+  const videoInfo = document.getElementById('videoInfo');
+  const errorMsg = document.getElementById('errorMsg');
+  const downloadActionContainer = document.getElementById('downloadActionContainer');
+  const confirmDownloadBtn = document.getElementById('confirmDownloadBtn');
+
+  // YouTube URL regex patterns
+  const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
+
+  // Quality options - only resolution numbers, no emojis, no extra text
+  const qualities = [
+    { resolution: '4K', code: 'maxresdefault', sizeLabel: 'Original 4K' },
+    { resolution: '720p', code: 'sddefault', sizeLabel: 'HD 720p' },
+    { resolution: '480p', code: 'hqdefault', sizeLabel: '480p' },
+    { resolution: '320p', code: 'mqdefault', sizeLabel: '320p' },
+    { resolution: '144p', code: 'default', sizeLabel: '144p' }
+  ];
+
+  // Store current selected thumbnail URL & video ID & selected resolution
+  let currentSelectedUrl = '';
+  let currentVideoId = '';
+  let currentSelectedResolution = '';
+
+  // Function to extract video ID from YouTube URL
+  function extractVideoId(url) {
+    if (!url) return null;
+    const match = url.match(youtubeRegex);
+    return match ? match[1] : null;
+  }
+
+  // Function to fetch video title (using YouTube oEmbed API)
+  async function fetchVideoTitle(videoId) {
+    try {
+      const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+      if (response.ok) {
+        const data = await response.json();
+        return data.title;
+      }
+    } catch (e) {
+      console.log('Could not fetch title');
+    }
+    return 'YouTube Thumbnail';
+  }
+
+  // Function to generate thumbnail URLs
+  function generateThumbnailUrls(videoId) {
+    const baseUrl = 'https://img.youtube.com/vi/' + videoId;
+    return qualities.map(quality => ({
+      ...quality,
+      url: `${baseUrl}/${quality.code}.jpg`
+    }));
+  }
+
+  // Remove active class from all quality buttons
+  function removeActiveClass() {
+    document.querySelectorAll('.quality-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+  }
+
+  // Handle quality selection: mark button as active, store selected URL, show download button
+  function handleQualitySelection(qualityObj, buttonElement) {
+    // Remove active from others
+    removeActiveClass();
+    // Add active to clicked button (dark/orange state)
+    buttonElement.classList.add('active');
+    // Store selected thumbnail URL and resolution
+    currentSelectedUrl = qualityObj.url;
+    currentSelectedResolution = qualityObj.resolution;
+    // Show download action container with green button
+    downloadActionContainer.style.display = 'block';
+  }
+
+  // Function to download thumbnail using blob (reliable)
+  async function downloadThumbnail(url, videoId, resolution) {
+    if (!url) {
+      alert('Please select a quality first by clicking on any resolution button (4K, 720p, etc).');
+      return;
+    }
+    try {
+      // Show loading state on download button
+      const originalBtnText = confirmDownloadBtn.innerHTML;
+      confirmDownloadBtn.innerHTML = '<span class="loading"></span> Preparing...';
+      confirmDownloadBtn.disabled = true;
+      confirmDownloadBtn.classList.add('disabled');
+      
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Network error');
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      // Clean filename: youtube_thumb_{videoId}_{resolution}.jpg
+      a.download = `youtube_thumb_${videoId}_${resolution}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+      
+      // Reset button
+      confirmDownloadBtn.innerHTML = 'Download Thumbnail';
+      confirmDownloadBtn.disabled = false;
+      confirmDownloadBtn.classList.remove('disabled');
+    } catch (err) {
+      console.error(err);
+      confirmDownloadBtn.innerHTML = 'Download Thumbnail';
+      confirmDownloadBtn.disabled = false;
+      confirmDownloadBtn.classList.remove('disabled');
+      alert('Download failed. Please try again or right-click the thumbnail preview to save.');
+    }
+  }
+
+  // Build quality buttons - only numbers (4K, 720p, 480p, 320p, 144p) - slightly smaller size
+  function buildQualityButtons(thumbnailUrls, videoId) {
+    qualityButtonsContainer.innerHTML = '';
+    // Reset download container visibility and selected URL
+    downloadActionContainer.style.display = 'none';
+    currentSelectedUrl = '';
+    currentSelectedResolution = '';
+    
+    thumbnailUrls.forEach((quality) => {
+      const btn = document.createElement('button');
+      btn.className = 'quality-btn';
+      // Only show resolution number (e.g., "4K", "720p", "480p", "320p", "144p")
+      btn.textContent = quality.resolution;
+      btn.setAttribute('data-quality-code', quality.code);
+      btn.setAttribute('data-url', quality.url);
+      btn.setAttribute('data-resolution', quality.resolution);
+      
+      // Add click event to handle selection (dark/active state)
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Update selection UI and store data
+        handleQualitySelection(quality, btn);
+      });
+      
+      qualityButtonsContainer.appendChild(btn);
+    });
+  }
+
+  // Display thumbnails and video info, reset selection state
+  async function displayThumbnails(videoId) {
+    const thumbnailUrls = generateThumbnailUrls(videoId);
+    currentVideoId = videoId;
+    
+    // Set default preview to maxres if available, else fallback to 720p
+    const previewItem = thumbnailUrls.find(q => q.code === 'maxresdefault') || 
+                        thumbnailUrls.find(q => q.code === 'sddefault') ||
+                        thumbnailUrls[2];
+    thumbnailImg.src = previewItem.url;
+    thumbnailImg.alt = 'YouTube Thumbnail Preview';
+    
+    // Build quality buttons with only resolution numbers
+    buildQualityButtons(thumbnailUrls, videoId);
+    
+    // Fetch and display video title
+    const videoTitle = await fetchVideoTitle(videoId);
+    videoInfo.innerHTML = `
+      <strong>🎥 Video ID:</strong> ${videoId}<br>
+      <strong>📝 Title:</strong> ${videoTitle.substring(0, 80)}${videoTitle.length > 80 ? '...' : ''}<br>
+      <strong>💡 Tip:</strong> Click on any quality number (4K/720p/480p/320p/144p) → button becomes dark → then click download.
+    `;
+    
+    // Show result section with animation
+    resultSection.style.display = 'block';
+  }
+
+  // Main function to handle URL submission
+  async function handleFetchThumbnail() {
+    let url = videoUrlInput.value.trim();
+    
+    // Hide previous error and reset UI
+    errorMsg.style.display = 'none';
+    resultSection.style.display = 'none';
+    downloadActionContainer.style.display = 'none';
+    currentSelectedUrl = '';
+    currentSelectedResolution = '';
+    
+    if (!url) {
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = '⚠️ Please enter a YouTube URL!';
+      return;
+    }
+    
+    // Clean URL - handle shorts format
+    if (url.includes('youtube.com/shorts/')) {
+      const shortsMatch = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
+      if (shortsMatch) {
+        url = `https://www.youtube.com/watch?v=${shortsMatch[1]}`;
+      }
+    }
+    
+    const videoId = extractVideoId(url);
+    
+    if (!videoId) {
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = '❌ Invalid YouTube URL! Please check and try again. Supported formats: youtube.com/watch?v=... , youtu.be/... , youtube.com/shorts/...';
+      resultSection.style.display = 'none';
+      return;
+    }
+    
+    // Show loading state on button
+    const originalBtnText = fetchBtn.innerHTML;
+    fetchBtn.innerHTML = '<span class="btn-text"><span class="loading"></span> Loading Thumbnail...</span>';
+    fetchBtn.disabled = true;
+    
+    try {
+      await displayThumbnails(videoId);
+    } catch (err) {
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = '⚠️ Something went wrong. Please try again.';
+      resultSection.style.display = 'none';
+    } finally {
+      fetchBtn.innerHTML = originalBtnText;
+      fetchBtn.disabled = false;
+    }
+  }
+
+  // Download button click handler
+  function onDownloadClick() {
+    if (!currentSelectedUrl) {
+      alert('Please select a quality first by clicking on any resolution button (4K, 720p, 480p, 320p, or 144p).');
+      return;
+    }
+    downloadThumbnail(currentSelectedUrl, currentVideoId, currentSelectedResolution);
+  }
+
+  // Add event listeners
+  fetchBtn.addEventListener('click', handleFetchThumbnail);
+  confirmDownloadBtn.addEventListener('click', onDownloadClick);
+  
+  // Allow Enter key in input field
+  videoUrlInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      handleFetchThumbnail();
+    }
+  });
+  
+  console.log('Thumbnail Downloader Ready - Clean design with matching orange theme');
+</script>
+</body>
+</html>
